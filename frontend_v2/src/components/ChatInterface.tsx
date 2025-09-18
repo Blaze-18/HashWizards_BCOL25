@@ -1,7 +1,8 @@
 "use client";
 import LLMMessageRenderer from "@/components/LLMMessageRenderer";
 import { useState, useRef, useEffect } from "react";
-import { sendChatMessage, ChatMessage } from "@/lib/api";
+import { sendChatMessage } from "@/lib/api";
+import { useChatStore, ChatMessage } from "@/stores/chatStore";
 
 interface ChatInterfaceProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -10,8 +11,20 @@ interface ChatInterfaceProps {
   onQuestionUsed: () => void;
 }
 
-export default function ChatInterface({ preferences, selectedQuestion, onQuestionUsed }: ChatInterfaceProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+interface ExtendedChatMessage extends ChatMessage {
+  sender: "user" | "ai";
+  timestamp: string;
+}
+
+export default function ChatInterface({
+  preferences,
+  selectedQuestion,
+  onQuestionUsed,
+}: ChatInterfaceProps) {
+  // Zustand store (persistent)
+  const messages = useChatStore((state) => state.messages);
+  const addMessage = useChatStore((state) => state.addMessage);
+
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -27,6 +40,7 @@ export default function ChatInterface({ preferences, selectedQuestion, onQuestio
     inputRef.current?.focus();
   }, []);
 
+  // Pre-fill input when a suggested question is clicked
   useEffect(() => {
     if (selectedQuestion) {
       setInputText(selectedQuestion);
@@ -39,57 +53,56 @@ export default function ChatInterface({ preferences, selectedQuestion, onQuestio
     if (!inputText.trim() || !preferences) return;
 
     const userMessage: ChatMessage = {
+      id: Date.now().toString(),
       text: inputText,
       sender: "user",
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    addMessage(userMessage); // save in Zustand/localStorage
     const currentInput = inputText;
     setInputText("");
     setIsTyping(true);
 
     try {
-      const response = await sendChatMessage(
-        currentInput,
-        preferences,
-        "user-session-id",
-      );
+      const response = await sendChatMessage(currentInput, preferences);
 
       if (response.success) {
-        const aiResponse: ChatMessage = {
+        const aiMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
           text: response.response,
           sender: "ai",
-          timestamp: new Date(),
+          timestamp: new Date().toISOString(),
         };
-        setMessages((prev) => [...prev, aiResponse]);
-
-        if (response.turnCount === 1) {
-          // First response - could show welcome animation
-        }
+        addMessage(aiMessage);
       } else {
-        const errorResponse: ChatMessage = {
+        const errorMessage: ChatMessage = {
+          id: (Date.now() + 2).toString(),
           text: "I'm having trouble processing your request right now. Please try again in a moment.",
           sender: "ai",
-          timestamp: new Date(),
+          timestamp: new Date().toISOString(),
         };
-        setMessages((prev) => [...prev, errorResponse]);
+        addMessage(errorMessage);
       }
     } catch (error) {
       console.error("Error sending message:", error);
-      const errorResponse: ChatMessage = {
+      const errorMessage: ChatMessage = {
+        id: (Date.now() + 3).toString(),
         text: "I'm having trouble connecting right now. Please try again.",
         sender: "ai",
-        timestamp: new Date(),
+        timestamp: new Date().toISOString(),
       };
-      setMessages((prev) => [...prev, errorResponse]);
+      addMessage(errorMessage);
     } finally {
       setIsTyping(false);
     }
   };
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const formatTime = (isoString: string) => {
+    return new Date(isoString).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   const TypingIndicator = () => (
@@ -136,10 +149,12 @@ export default function ChatInterface({ preferences, selectedQuestion, onQuestio
           </div>
         ) : (
           <>
-            {messages.map((message, index) => (
+            {messages.map((message) => (
               <div
-                key={index}
-                className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"} items-end space-x-2`}
+                key={message.id}
+                className={`flex ${
+                  message.sender === "user" ? "justify-end" : "justify-start"
+                } items-end space-x-2`}
               >
                 {message.sender === "ai" && (
                   <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mb-1">
@@ -198,7 +213,7 @@ export default function ChatInterface({ preferences, selectedQuestion, onQuestio
               type="text"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+              onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
               placeholder="Type your message..."
               className="w-full px-3 sm:px-4 py-3 sm:py-3.5 border border-gray-300/80 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-400/50 bg-white text-gray-800 placeholder-gray-400 pr-8 sm:pr-12 transition-all duration-200 text-sm sm:text-base"
               disabled={isTyping}
