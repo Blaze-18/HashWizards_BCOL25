@@ -1,154 +1,82 @@
+For the **root README.md**, you don’t need to repeat the detailed project structure of the frontend and backend since each subproject already has its own README. At the root, the goal is to **give a high-level overview**, highlight key features, AI methods, tech stack, screenshots, and optionally a placeholder for a video.
+
+Here’s a fully copy-pasteable `README.md` for the **root folder** of Sentio, following your instructions:
+
+---
+
 # 🌟 Sentio – AI-Powered Neurodiversity Support Platform
 
-Sentio is an **AI-driven support platform** designed for neurodiverse individuals, particularly children and teenagers with conditions like **ASD (Autism Spectrum Disorder)** and **ADHD**.  
-It combines **personalized AI assistance**, **scenario-based learning**, and **preference-driven experiences** to provide engaging therapeutic support.
+Sentio is an **AI-driven support platform** designed for neurodiverse individuals, particularly children and teenagers with conditions like **ASD (Autism Spectrum Disorder)** and **ADHD**. It combines **personalized AI assistance**, **scenario-based learning**, and **preference-driven experiences** to provide engaging therapeutic support. The platform consists of a **Next.js frontend** and a **FastAPI backend** that work seamlessly to deliver interactive learning and personalized recommendations.
 
 ---
 
 ## ✅ Key Features
 
-### 🧠 Personalized AI Assistant
-- **RAG-Based Architecture** – Retrieval Augmented Generation for context-aware responses
-- **Preference-Driven** – Adapts responses based on detailed user preferences
-- **Advanced Chaining** – Uses LangChain's **sequential & parallel chains** for accuracy
-- **Semantic Search** – Context retrieval using **sentence transformer embeddings**
+* **Personalized AI Assistant:**
+  Uses **RAG-based architecture** (Retrieval Augmented Generation) with **LangChain sequential and parallel chains** to generate personalized responses based on user preferences. Semantic search on the knowledge base is performed using **sentence-transformer embeddings**.
 
-### 🎯 Scenario-Based Learning
-- **Preference-Based Recommendations** – Scenarios tailored to individual needs
-- **Semantic Matching** – Compares user preferences and scenarios using **cosine similarity**
-- **Skill Development Domains**:
-  - Emotional regulation  
-  - Social skills development  
-  - Executive functioning  
-  - Adaptability training  
+* **Preference-Driven Personalization:**
+  Users can fill out detailed preferences which the system uses to tailor responses, scenario recommendations, and learning activities.
 
-### 👤 User Experience
-- **Preference Management** – Stores user preferences for personalization
-- **Progress Tracking** – Monitors user engagement with scenarios and lessons
-- **Interactive UI** – Simple and responsive design built with **Next.js** and **Tailwind CSS**
+* **Scenario-Based Learning:**
 
----
+  * Learners are provided with **interactive learning modules** based on their preferences.
+  * Scenarios cover domains like **emotional regulation, social skills, executive functioning, and adaptability training**.
+  * **Semantic matching** is applied to ensure scenarios are relevant using **cosine similarity on embeddings**.
 
-## 🛠 Tech Stack
+* **Frontend Capabilities:**
 
-### **Frontend**
-- **Framework**: Next.js 15.5.0
-- **Styling**: Tailwind CSS
-- **UI Enhancements**: ShadCN/UI components, Framer Motion animations
-- **Routing & Navigation**: App Router
-
-### **Backend**
-- **Framework**: FastAPI (Python 3.12)
-- **AI/ML**: LangChain, GroqCloud LLM API
-- **Embeddings**: Sentence Transformers (*all-MiniLM-L6-v2*)
-- **Validation**: Pydantic
-- **Storage**: Local JSON & PKL files (Prototype phase)
+  * **Chat Interface:** Interactive AI-driven conversation with persistent chat history (**Zustand**).
+  * **Dashboard & Progress Tracking:** Overview of user progress, recently recommended scenarios, and preferences.
+  * **Preferences Form:** Collects detailed information to personalize experience.
+  * **Social Corner:** Lightweight social interactions among users.
+  * **Responsive & Modern UI:** Built with **Next.js, Tailwind CSS, ShadCN/UI components, and Framer Motion animations**.
 
 ---
 
-## 📂 Project Structure
+## 📂 Tech Stack
 
-### **Frontend (Next.js)**
-```
-└── 📁src
-    └── 📁app
-        └── 📁about
-            ├── page.tsx
-        └── 📁api
-            └── 📁save-preferences
-                ├── route.ts
-            └── 📁scenarios
-                └── 📁recommend
-                    ├── route.ts
-                └── 📁search
-                    ├── route.ts
-        └── 📁auth
-            └── 📁login
-                ├── page.tsx
-            └── 📁register
-                ├── page.tsx
-        └── 📁chat
-            ├── page.tsx
-        └── 📁dashboard
-            ├── page.tsx
-        └── 📁home
-            ├── page.tsx
-        └── 📁preferences
-            ├── page.tsx
-        └── 📁social
-            ├── page.tsx
-        ├── globals.css
-        ├── layout.tsx
-        ├── page.tsx
-    └── 📁assets
-        ├── bot.png
-        ├── logo.png
-    └── 📁components
-        ├── ChatInterface.tsx
-        ├── LLMMessageRenderer.tsx
-        ├── Navbar.tsx
-        ├── ScenarioInterface.tsx
-        ├── ScenarioLearningModal.tsx
-    └── 📁contexts
-        ├── PreferencesContext.tsx
-    └── 📁lib
-        └── api.ts
-```
+**Frontend:** Next.js, React, Tailwind CSS, Zustand, Axios
+**Backend:** FastAPI, Python, Pydantic, LangChain, GroqCloud LLM API, Sentence-Transformer embeddings
+**State Management:** Persistent state with Zustand
+**API Communication:** Axios for RESTful endpoints
 
-### **Backend as Microservice (FastAPI)**
-```
-└── 📁app
-    └── 📁__pycache__
-        ├── main.cpython-312.pyc
-    └── 📁api
-        └── 📁__pycache__
-            ├── __init__.cpython-312.pyc
-            ├── routes.cpython-312.pyc
-            ├── scenario_routes.cpython-312.pyc
-        ├── __init__.py
-        ├── routes.py
-        ├── scenario_routes.py
-    └── 📁core
-        └── 📁__pycache__
-            ├── __init__.cpython-312.pyc
-            ├── config.cpython-312.pyc
-        ├── __init__.py
-        ├── config.py
-    └── 📁llm
-        └── 📁__pycache__
-            ├── __init__.cpython-312.pyc
-            ├── response_generator.cpython-312.pyc
-        ├── __init__.py
-        ├── response_generator.py
-    └── 📁models
-        └── 📁__pycache__
-            ├── __init__.cpython-312.pyc
-            ├── preferences.cpython-312.pyc
-            ├── scenario_content.cpython-312.pyc
-            ├── scenario.cpython-312.pyc
-        ├── __init__.py
-        ├── preferences.py
-        ├── scenario_content.py
-        ├── scenario.py
-    └── 📁profiles
-        ├── __init__.py
-    └── 📁retrieval
-        ├── __init__.py
-    └── 📁services
-        └── 📁__pycache__
-            ├── __init__.cpython-312.pyc
-            ├── preference_processor.cpython-312.pyc
-            ├── scenario_generator.cpython-312.pyc
-            ├── scenario_service.cpython-312.pyc
-        ├── __init__.py
-        ├── preference_processor.py
-        ├── scenario_generator.py
-        ├── scenario_service.py
-    └── 📁utils
-        ├── __init__.py
-    ├── main.py
-    ├── scenario_embeddings.pkl
-    └── scenarios.json
-```
+---
+
+## 📷 Screenshots
+
+### Landing Page
+
+![Landing Page](./frontend_v2/screenshotsLanding.png)
+
+### Chat Interface
+
+![Chat Interface](./frontend_v2/screenshots/Chat.png)
+
+### Dashboard
+
+![Dashboard](./frontend_v2/screenshots/Dashboard.png)
+
+### Scenario Recommendations
+
+![Scenario Recommendations](./frontend_v2/screenshots/Scenario.png)
+
+### About Page
+
+![About Page](./frontend_v2/screenshots/About.png)
 
 
+---
+
+## 🔮 Future Enhancements
+
+* Integrate persistent database storage for user data and scenarios.
+* Multimedia support for scenarios including images and audio.
+* Real-time collaboration features for therapists and users.
+* Notifications and analytics dashboards for user engagement.
+
+---
+
+## 📄 License
+
+MIT License
