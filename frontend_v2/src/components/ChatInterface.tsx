@@ -1,0 +1,221 @@
+"use client";
+import LLMMessageRenderer from "@/components/LLMMessageRenderer";
+import { useState, useRef, useEffect } from "react";
+import { sendChatMessage, ChatMessage } from "@/lib/api";
+
+interface ChatInterfaceProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  preferences: any;
+  selectedQuestion: string;
+  onQuestionUsed: () => void;
+}
+
+export default function ChatInterface({ preferences, selectedQuestion, onQuestionUsed }: ChatInterfaceProps) {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [inputText, setInputText] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // Focus input on mount
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (selectedQuestion) {
+      setInputText(selectedQuestion);
+      inputRef.current?.focus();
+      onQuestionUsed();
+    }
+  }, [selectedQuestion, onQuestionUsed]);
+
+  const handleSendMessage = async () => {
+    if (!inputText.trim() || !preferences) return;
+
+    const userMessage: ChatMessage = {
+      text: inputText,
+      sender: "user",
+      timestamp: new Date(),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    const currentInput = inputText;
+    setInputText("");
+    setIsTyping(true);
+
+    try {
+      const response = await sendChatMessage(
+        currentInput,
+        preferences,
+        "user-session-id",
+      );
+
+      if (response.success) {
+        const aiResponse: ChatMessage = {
+          text: response.response,
+          sender: "ai",
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, aiResponse]);
+
+        if (response.turnCount === 1) {
+          // First response - could show welcome animation
+        }
+      } else {
+        const errorResponse: ChatMessage = {
+          text: "I'm having trouble processing your request right now. Please try again in a moment.",
+          sender: "ai",
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, errorResponse]);
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      const errorResponse: ChatMessage = {
+        text: "I'm having trouble connecting right now. Please try again.",
+        sender: "ai",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorResponse]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
+  const TypingIndicator = () => (
+    <div className="flex justify-start items-end space-x-2 mb-4">
+      <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mb-1">
+        <span className="text-white text-sm">AI</span>
+      </div>
+      <div className="bg-white text-gray-800 rounded-2xl rounded-bl-md border border-gray-200/80 shadow-xs px-4 py-3">
+        <div className="flex space-x-1">
+          <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
+          <div
+            className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
+            style={{ animationDelay: "0.2s" }}
+          ></div>
+          <div
+            className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
+            style={{ animationDelay: "0.4s" }}
+          ></div>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="h-full flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+      {/* Messages Container */}
+      <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
+        {messages.length === 0 ? (
+          <div className="text-center py-8 sm:py-16 px-4">
+            <div className="w-16 sm:w-20 h-16 sm:h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-5">
+              <span className="text-2xl sm:text-3xl">👋</span>
+            </div>
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2 sm:mb-3">
+              Welcome to Your Support Chat
+            </h3>
+            <p className="text-gray-600 text-xs sm:text-sm max-w-md mx-auto leading-relaxed">
+              I&apos;m here to provide personalized support based on your
+              preferences. Let&apos;s work together on your goals and
+              challenges.
+            </p>
+            <div className="mt-3 sm:mt-4 text-xs text-gray-400">
+              Type your message below to get started
+            </div>
+          </div>
+        ) : (
+          <>
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"} items-end space-x-2`}
+              >
+                {message.sender === "ai" && (
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mb-1">
+                    <span className="text-white text-xs sm:text-sm">AI</span>
+                  </div>
+                )}
+                <div
+                  className={`${
+                    message.sender === "user"
+                      ? "max-w-[70%] md:max-w-xl ml-auto"
+                      : "max-w-[85%] md:max-w-2xl lg:max-w-3xl xl:max-w-4xl"
+                  }`}
+                >
+                  <div
+                    className={`rounded-2xl px-3 sm:px-4 py-2 sm:py-3 shadow-sm ${
+                      message.sender === "user"
+                        ? "bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-br-md"
+                        : "bg-white text-gray-800 rounded-bl-md border border-gray-200/80 shadow-xs"
+                    }`}
+                  >
+                    <div className="text-xs sm:text-sm leading-relaxed">
+                      {message.sender === "ai" ? (
+                        <LLMMessageRenderer content={message.text} />
+                      ) : (
+                        <span>{message.text}</span>
+                      )}
+                    </div>
+                  </div>
+                  <div
+                    className={`text-xs text-gray-400 mt-1 sm:mt-2 px-1 ${
+                      message.sender === "user" ? "text-right" : "text-left"
+                    }`}
+                  >
+                    {formatTime(message.timestamp)}
+                  </div>
+                </div>
+                {message.sender === "user" && (
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-gray-600 to-gray-700 rounded-full flex items-center justify-center flex-shrink-0 mb-1">
+                    <span className="text-white text-xs sm:text-sm">You</span>
+                  </div>
+                )}
+              </div>
+            ))}
+            {isTyping && <TypingIndicator />}
+          </>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Input Area */}
+      <div className="bg-white border-t border-gray-200/80 p-3 sm:p-6 safe-area-bottom">
+        <div className="flex space-x-2 sm:space-x-3 items-end">
+          <div className="flex-1 relative">
+            <input
+              ref={inputRef}
+              type="text"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+              placeholder="Type your message..."
+              className="w-full px-3 sm:px-4 py-3 sm:py-3.5 border border-gray-300/80 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-400/50 bg-white text-gray-800 placeholder-gray-400 pr-8 sm:pr-12 transition-all duration-200 text-sm sm:text-base"
+              disabled={isTyping}
+            />
+            <div className="absolute right-2 sm:right-3 top-3 sm:top-3.5 text-gray-400 text-xs hidden sm:block">
+              ⏎
+            </div>
+          </div>
+          <button
+            onClick={handleSendMessage}
+            disabled={!inputText.trim() || isTyping}
+            className="px-4 sm:px-6 py-3 sm:py-3.5 bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium min-w-[70px] sm:min-w-[90px] shadow-sm hover:shadow-md text-sm sm:text-base"
+          >
+            {isTyping ? "..." : "Send"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
