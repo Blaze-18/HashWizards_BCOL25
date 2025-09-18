@@ -1,6 +1,3 @@
-Perfect! Based on the details you provided, here’s a **fully copy-pasteable frontend `README.md`** for the Sentio project, written in the clean, technical style you like:
-
----
 
 # 🌟 Sentio Frontend – AI-Powered Neurodiversity Support Platform
 

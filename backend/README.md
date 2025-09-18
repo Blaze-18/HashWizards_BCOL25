@@ -1,13 +1,3 @@
-Got it! For the **backend README.md**, since it’s a purely technical backend, we can clean it up:
-
-* Remove unnecessary `__pycache__` and `.pyc` files from the project structure.
-* Keep only relevant folders and files like `api`, `models`, `services`, `core`, `llm`, `utils`, `main.py`, `scenario_embeddings.pkl`, and `scenarios.json`.
-* Keep the flow consistent with the root README and frontend README: high-level description, key features, AI backend methods, tech stack, simplified project structure, installation, how it works, future enhancements, license.
-* No screenshots or videos needed.
-
-Here’s a **ready-to-copy backend README.md** in the cleaned format:
-
----
 
 # 🌟 Sentio Backend API
 
