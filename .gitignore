@@ -50,10 +50,9 @@ MANIFEST
 # Virtual Environments
 venv/
 env/
-ENV/
 .venv/
 .env/
-virtualenv/
+
 
 # FastAPI specific
 .pytest_cache/
