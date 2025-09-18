@@ -1,0 +1,91 @@
+{
+    "scenarios": [
+        {
+            "id": "asd_emotional_001",
+            "title": "When Plans Change Suddenly",
+            "description": "Managing anxiety when routines are disrupted - for ASD",
+            "scenario_type": "emotional_regulation",
+            "primary_conditions": ["ASD Level 1"],
+            "difficulty": "intermediate",
+            "target_age_groups": ["9-11", "12-14"],
+            "content": "Your teacher just announced that the field trip tomorrow is cancelled due to rain. You've been looking forward to this for weeks and had the whole day planned out in your mind. You feel a wave of panic and disappointment. Your stomach feels tight and you want to yell. What can you do to manage these big feelings?",
+            "suggested_strategies": ["visual_supports", "clear_expectations", "breaks"],
+            "sensory_considerations": [],
+            "communication_style": ["structured", "direct"],
+            "attention_span": "medium"
+        },
+        {
+            "id": "asd_social_001",
+            "title": "Understanding Jokes and Sarcasm",
+            "description": "Navigating figurative language in social situations - for ASD",
+            "scenario_type": "social_skills",
+            "primary_conditions": ["ASD Level 1"],
+            "difficulty": "intermediate",
+            "target_age_groups": ["12-14", "15-17"],
+            "content": "A classmate says 'Wow, you're really on fire today!' after you answer a question correctly. You look down at yourself confused - you're not actually on fire. Other students are laughing. You feel embarrassed and don't understand what's happening. How could you handle this situation?",
+            "suggested_strategies": ["social_stories", "clear_expectations", "positive_reinforcement"],
+            "sensory_considerations": [],
+            "communication_style": ["direct", "structured"],
+            "attention_span": "medium"
+        },
+        {
+            "id": "adhd_executive_001",
+            "title": "The Overwhelming Homework Assignment",
+            "description": "Breaking down large tasks into manageable steps - for ADHD",
+            "scenario_type": "executive_functioning",
+            "primary_conditions": ["ADHD"],
+            "difficulty": "intermediate",
+            "target_age_groups": ["12-14", "15-17"],
+            "content": "You have a big science project due in two weeks. Every time you think about starting, your mind jumps to all the different parts: research, experiment, write-up, presentation. It feels like too much and you keep putting it off. What strategies could help you get started?",
+            "suggested_strategies": ["timers", "clear_expectations", "breaks"],
+            "sensory_considerations": [],
+            "communication_style": ["direct", "structured"],
+            "attention_span": "short"
+        },
+        {
+            "id": "adhd_attention_001",
+            "title": "Staying Focused in Class",
+            "description": "Maintaining attention during lessons - for ADHD",
+            "scenario_type": "academic_support",
+            "primary_conditions": ["ADHD"],
+            "difficulty": "beginner",
+            "target_age_groups": ["9-11", "12-14"],
+            "content": "You're sitting in math class and trying to pay attention, but your mind keeps wandering. You notice the clock ticking, a bird outside, the way your pencil feels... and suddenly you realize you've missed what the teacher said about the homework. What tools could help you stay focused?",
+            "suggested_strategies": ["movement_breaks", "fidget_tools", "clear_expectations"],
+            "sensory_considerations": [],
+            "communication_style": ["direct", "brisk"],
+            "attention_span": "short"
+
+        },
+        {
+            "id": "asd_sensory_001",
+            "title": "Loud Assembly in the Gym",
+            "description": "Managing sensory overload in loud environments - for ASD",
+            "scenario_type": "sensory_processing",
+            "primary_conditions": ["ASD Level 1"],
+            "difficulty": "beginner",
+            "target_age_groups": ["6-8", "9-11"],
+            "content": "You're in the gym for a school assembly. The echoes are loud, the lights are bright, and people are cheering all around you. You feel overwhelmed and want to cover your ears. Your heart is beating fast. What can you do to feel more comfortable?",
+            "suggested_strategies": ["sensory_tools", "quiet_space", "deep_breathing"],
+            "sensory_considerations": ["auditory", "visual"],
+            "communication_style": ["gentle", "visual"],
+            "attention_span": "short"
+
+        },
+        {
+            "id": "adhd_emotional_001",
+            "title": "Managing Frustration with Mistakes",
+            "description": "Coping with impatience and frustration - for ADHD",
+            "scenario_type": "emotional_regulation",
+            "primary_conditions": ["ADHD"],
+            "difficulty": "beginner",
+            "target_age_groups": ["6-8", "9-11"],
+            "content": "You're building a model car and a small piece keeps falling off. You try to put it back but your fingers feel clumsy. You feel a surge of frustration and want to throw the whole thing. How can you calm down and try again?",
+            "suggested_strategies": ["movement_breaks", "deep_breathing", "positive_reinforcement"],
+            "sensory_considerations": [],
+            "communication_style": ["enthusiastic", "direct"],
+            "attention_span": "short"
+
+        }
+    ]
+}
