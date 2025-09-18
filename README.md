@@ -1,8 +1,3 @@
-For the **root README.md**, you don’t need to repeat the detailed project structure of the frontend and backend since each subproject already has its own README. At the root, the goal is to **give a high-level overview**, highlight key features, AI methods, tech stack, screenshots, and optionally a placeholder for a video.
-
-Here’s a fully copy-pasteable `README.md` for the **root folder** of Sentio, following your instructions:
-
----
 
 # 🌟 Sentio – AI-Powered Neurodiversity Support Platform
 
