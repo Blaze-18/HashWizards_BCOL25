@@ -7,24 +7,26 @@ export interface ChatMessage {
     role: "user" | "assistant";
     content: string;
     timestamp: string;
-    }
+}
 
-    interface ChatStore {
+interface ChatStore {
     messages: ChatMessage[];
+    sessionId: string;
     addMessage: (msg: ChatMessage) => void;
     clearMessages: () => void;
-    }
+}
 
 export const useChatStore = create<ChatStore>()(
     persist(
         (set) => ({
         messages: [],
-        addMessage: (msg) =>
+        sessionId: crypto.randomUUID(),
+        addMessage: (msg: ChatMessage) =>
             set((state) => ({ messages: [...state.messages, msg] })),
         clearMessages: () => set({ messages: [] }),
         }),
         {
-        name: "chat-storage", // this will be the key in localStorage
+        name: "chat-storage", // localStorage key
         }
     )
 );
