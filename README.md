@@ -42,7 +42,7 @@ Sentio is an **AI-driven support platform** designed for neurodiverse individual
 
 ### Landing Page
 
-![Landing Page](./frontend_v2/screenshotsLanding.png)
+![Landing Page](./frontend_v2/screenshots/Landing.png)
 
 ### Chat Interface
 
